@@ -9,9 +9,8 @@ type Bigint struct {
 	value string
 }
 
-func NewInt(num string) (Bigint, error) {
-	return Bigint{value: num}, nil
-}
+func NewInt(num string) (Bigint, error) { return Bigint{value: num}, nil }
+
 func (z *Bigint) Set(num string) error {
 	z.value = num
 	return nil
@@ -21,13 +20,9 @@ func Add(a, b Bigint) Bigint {
 	n1 := IsPositive(a)
 	n2 := IsPositive(b)
 
-	if n1 && !n2 {
-		return Sub(a, MakePositive(&b))
-	} else if !n1 && n2 {
-		return Sub(b, MakePositive(&a))
-	} else if !n1 && !n2 {
-		IsNegativeResult = true
-	}
+	if n1 && !n2 { return Sub(a, MakePositive(&b)) }
+	else if !n1 && n2 { return Sub(b, MakePositive(&a)) }
+	else if !n1 && !n2 { IsNegativeResult = true }
 
 	a1, _ := NewInt(a.value)
 	b1, _ := NewInt(b.value)
@@ -51,13 +46,9 @@ func Add(a, b Bigint) Bigint {
 		change = len(s2) - len(s1)
 	}
 	if bigger == 1 {
-		for i := 0; i < change; i++ {
-			s2 = append([]string{"0"}, s2...)
-		}
+		for i := 0; i < change; i++ { s2 = append([]string{"0"}, s2...) }
 	} else {
-		for i := 0; i < change; i++ {
-			s1 = append([]string{"0"}, s1...)
-		}
+		for i := 0; i < change; i++ { s1 = append([]string{"0"}, s1...) }
 	}
 
 	for i := length - 1; i >= 0; i-- {
@@ -80,27 +71,19 @@ func Add(a, b Bigint) Bigint {
 			result = append([]string{r}, result...)
 		}
 	}
-	if memory != "" {
-		result = append([]string{memory}, result...)
-	}
+	if memory != "" { result = append([]string{memory}, result...) }
 	trimmed := TrimString(strings.Join(result, ""))
-	if IsNegativeResult {
-		trimmed = "-" + trimmed
-
-	}
+	if IsNegativeResult { trimmed = "-" + trimmed }
 	return Bigint{value: trimmed}
 }
 func Sub(a, b Bigint) Bigint {
 	n1 := IsPositive(a)
 	n2 := IsPositive(b)
 
-	if !n1 && !n2 {
-		return Add(MakePositive(&b), a)
-	} else if n1 && !n2 {
-		return Add(a, MakePositive(&b))
-	} else if !n1 && n2 {
-		return Add(a, MakeNegative(&b))
-	}
+	if !n1 && !n2 { return Add(MakePositive(&b), a) }
+	else if n1 && !n2 { return Add(a, MakePositive(&b)) }
+	else if !n1 && n2 { return Add(a, MakeNegative(&b)) }
+	
 	if !IsBigger(a, b) {
 		x := Sub(b, a)
 		z := strings.Split(x.value, "")
@@ -127,13 +110,9 @@ func Sub(a, b Bigint) Bigint {
 		change = len(s2) - len(s1)
 	}
 	if bigger == 1 {
-		for i := 0; i < change; i++ {
-			s2 = append([]string{"0"}, s2...)
-		}
+		for i := 0; i < change; i++ { s2 = append([]string{"0"}, s2...) }
 	} else {
-		for i := 0; i < change; i++ {
-			s1 = append([]string{"0"}, s1...)
-		}
+		for i := 0; i < change; i++ { s1 = append([]string{"0"}, s1...) }
 	}
 
 	for i := length - 1; i >= 0; i-- {
@@ -144,9 +123,8 @@ func Sub(a, b Bigint) Bigint {
 			numA -= int64(memory)
 			memory = 0
 		}
-		if numA >= numB {
-			res = int(numA - numB)
-		} else {
+		if numA >= numB { res = int(numA - numB)}
+		else {
 			res = 10 + int(numA-numB)
 			memory = 1
 		}
@@ -156,11 +134,8 @@ func Sub(a, b Bigint) Bigint {
 	return Bigint{value: trimmed}
 }
 func Abs(x Bigint) Bigint {
-	if strings.HasPrefix(x.value, "-") {
-		return Bigint{value: strings.Replace(x.value, "-", "", 1)}
-	} else {
-		return x
-	}
+	if strings.HasPrefix(x.value, "-") { return Bigint{value: strings.Replace(x.value, "-", "", 1)} }
+	else { return x }
 }
 
 // func Multiply(a, b Bigint) Bigint {
@@ -240,23 +215,16 @@ func Abs(x Bigint) Bigint {
 // }
 
 func IsPositive(x Bigint) bool {
-	if strings.HasPrefix(x.value, "-") {
-		return false
-	} else {
-		return true
-	}
+	if strings.HasPrefix(x.value, "-") { return false }
+	else { return true }
 }
 func TrimString(x string) string {
-	for strings.HasPrefix(x, "0") && len(x) > 1 {
-		x = strings.Replace(x, "0", "", 1)
-	}
+	for strings.HasPrefix(x, "0") && len(x) > 1 { x = strings.Replace(x, "0", "", 1) }
 	return x
 }
 func MakePositive(x *Bigint) Bigint {
-	if strings.HasPrefix(x.value, "-") {
-		x.value = strings.Replace(x.value, "-", "", 1)
-	}
-	return Bigint{value: x.value}
+	if strings.HasPrefix(x.value, "-") { x.value = strings.Replace(x.value, "-", "", 1) }
+	return Bigint{ value: x.value }
 }
 func MakeNegative(x *Bigint) Bigint {
 	if !strings.HasPrefix(x.value, "-") {
@@ -265,19 +233,15 @@ func MakeNegative(x *Bigint) Bigint {
 		res := strings.Join(s, "")
 		return Bigint{value: res}
 
-	} else {
-		return Bigint{value: x.value}
-
-	}
+	} else { return Bigint{value: x.value} }
 }
 func IsBigger(a, b Bigint) bool {
 
 	x1 := MakePositive(&Bigint{value: a.value})
 	x2 := MakePositive(&Bigint{value: b.value})
 
-	if len(x1.value) > len(x2.value) {
-		return true
-	} else if len(x1.value) == len(x2.value) {
+	if len(x1.value) > len(x2.value) { return true }
+	else if len(x1.value) == len(x2.value) {
 
 		s1 := strings.Split(x1.value, "")
 		s2 := strings.Split(x2.value, "")
@@ -285,12 +249,8 @@ func IsBigger(a, b Bigint) bool {
 		for i := 0; i < len(s1); i++ {
 			num1, _ := strconv.ParseInt(s1[i], 10, 64)
 			num2, _ := strconv.ParseInt(s2[i], 10, 64)
-			if num1 > num2 {
-				return true
-			}
+			if num1 > num2 { return true }
 		}
 		return false
-	} else {
-		return false
-	}
+	} else { return false }
 }
